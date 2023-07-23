@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+    body {
+      background: linear-gradient(to right, silver, black);
+    }
+
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+        width: 100%;
+        min-height: 100vh;
+        background: linear-gradient(to right, silver, black);
+        
+    }
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: black;
+    }
+
+    .box {
+        max-width: 500px;
+        background: #FEFCFF;
+        padding: 30px;
+        width: 100%;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        -o-border-radius: 5px;
+    }
+
+    .upload-area-title {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 20px;
+        font-weight: 600;
+        color: black;
+    }
+
+    .uploadlabel {
+        margin-top: 9px;
+        width: 100%;
+        color:black;
+        min-height: 100px;
+        background: grey;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border: 3px dashed black;
+        cursor: pointer;
+    }
+
+    .uploadlabel span {
+        font-size: 70px;
+        color: black;
+        font-size: 20px;
+        font-weight: 800;
+        font-family: cursive;
+    }
+
+    .uploaded {
+        margin: 30px 0;
+        font-size: 16px;
+        font-weight: 700;
+        color: #f0f8ff;
+    }
+
+    .showfilebox {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 0;
+        padding: 10px 15px;
+        box-shadow: #F0F8FF 0px 0px 0px 1px, #5F9EA0 0px 0px 0px 1px inset;
+        background: #fff;
+    }
+
+    .showfilebox.left {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .showfilebox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+  
+    .filetype {
+        display: inline-block;
+        background-color: #f1f1f1;
+        padding: 5px 10px;
+        border-radius: 3px;
+        margin-right: 10px;
+      }
+  
+    .progress-bar-container {
+        width: 100%;
+        height: 10px;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+  
+    .progress-bar-inner {
+        height: 100%;
+        background-color: black;
+        width: 0;
+        transition: width 0.3s;
+    }
+
+    /* Add some space (gap) between the buttons */
+    .button-gap {
+      margin: 10px; /* You can adjust the value as needed */
+    }
+
+</style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Upload File</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="box">
+            <div class="input-box">
+              <form id="upload-form" action="/upload-file" method="POST" enctype="multipart/form-data">
+                <h2 class="upload-area-title">Upload Files</h2>
+                
+                    <label for="case_number">Case Number:</label>
+                    <input type="text" name="case_number" id="case_number" value="{{ case_number }}">
+                              
+                    <br>
+                    <label for="case_name">Case Name:</label>
+                    <input type="text" name="case_name" id="case_name" value="{{ case_name }}">
+                              
+                    <br>
+
+    
+                <form id="upload-form" method="POST" enctype="multipart/form-data">    
+                    <label for="upload" class="uploadlabel">
+                        
+                      <span><i class="fa fa-cloud-upload"></i></span>
+                      <p id="file-name">Click To Upload</p>
+                      <input type="file"name="file" id="upload" accept=".doc, .docx, .pdf, .png, .jpg" style="display: none;">
+                    </label>
+                    <progress id="upload-progress" value="0" max="100"></progress>
+                   
+                   
+                      
+                      <button type="submit" id="upload-button">Upload</button>
+
+                      
+                      
+                      
+                      
+                    </form>
+                    <p id="upload-message" style="display: none;"></p>
+                  </form>
+                  
+              
+           
+            
+        </div>
+    </div>
+
+
+</body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const uploadInput = document.getElementById('upload');
+    const fileNameLabel = document.getElementById('file-name');
+    const uploadForm = document.getElementById('upload-form');
+    const uploadMessage = document.getElementById('upload-message');
+  
+    uploadInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        fileNameLabel.textContent = file.name;
+      } else {
+        fileNameLabel.textContent = 'Click To Upload';
+      }
+    });
+  
+    uploadForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const file = uploadInput.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        formData.append('case_number', document.getElementById('case_number').value);
+        formData.append('case_name', document.getElementById('case_name').value);
+        console.log(formData)
+  
+        const uploadEndpoint = '/upload-file'; // Replace with your server-side endpoint for file upload
+  
+        fetch(uploadEndpoint, {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => {
+          if (response.ok) {
+            // If the upload was successful, show a success message
+            uploadMessage.style.display = 'block';
+            uploadMessage.textContent = 'File uploaded successfully.';
+            return window.location.href='/display'
+          } else {
+            // Handle any errors or display an error message
+            uploadMessage.style.display = 'block';
+            uploadMessage.textContent = 'Error in file upload, please try again.';
+            console.error('Error:', response.statusText);
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      } else {
+        uploadMessage.style.display = 'block';
+        uploadMessage.textContent = 'Please select a file to upload.';
+      }
+    });
+  });
+  
+</script>
+
+
+
+
+
+
+      
+</html>

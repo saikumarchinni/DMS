@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Search</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json2.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <!-- Add the Font Awesome CDN link for the arrow icons -->
+    <script src="https://kit.fontawesome.com/919cc0e684.js" crossorigin="anonymous"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body, html {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            justify-content: space-between;
+            margin: 0;
+            background: linear-gradient(to right, silver, #FAF9F6);
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80px;
+            background: linear-gradient(to right, silver, black);
+            gap:10px;
+            
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position:left center;
+            padding: 0 20px;
+            position: fixed;
+            align-items: center;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1;
+
+        }
+        .top-section h1 {
+          
+            font-size: 20px;
+            font-style: oblique;
+            margin-top: 50px;
+            color:white;
+            padding-bottom:20px;
+            text-align:center;
+        }
+        .top-section p {
+          
+            font-size: 18px;
+            font-style: oblique;
+            margin-top: 10px;
+            color:white;
+            padding-top:30px;
+            text-align:center;
+        }
+        .image{
+          float:left;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width:100px;
+        }
+        
+          
+        .back-to-home svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+            margin-right:3px;
+            
+        }
+
+        .user-dropdown {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+          }
+        .user-dropdown .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .user-dropdown .dropdown-text {
+            margin-right: 5px;
+        }
+        
+        
+        .user-dropdown .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 1;
+            margin-top: 20px;
+            display: none;
+            padding: 5px 0;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 4px;
+        }
+        
+        .user-dropdown .dropdown-menu a {
+            display: block;
+            padding: 5px 10px;
+            color: #333;
+            text-decoration: none;
+        }
+        
+        .user-dropdown .dropdown-menu a:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .user-dropdown.show .dropdown-menu {
+            display: block;
+        }
+
+        .left-section {
+            width: 1%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            margin-right:205px;
+            margin-top:60px;
+            flex-grow: 1;
+            min-height: 87vh; /* Set the minimum height of the left section to 100% of the viewport height */
+            box-sizing: border-box; /* Include padding in the height calculation */
+        }
+        .left-section label {
+            margin-bottom: 10px; /* Adjust the margin bottom as desired */
+        }
+        
+        .left-section div:not(:last-child) {
+            margin-bottom: 79px; /* Add spacing between each label section */
+        }
+        .label-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sort-label-section {
+            margin-bottom: 2px;
+            padding-top: 15px; /* Adjust the padding top as desired */
+            padding-bottom: 3px; /* Adjust the padding bottom as desired */
+            /* Set the border-top instead of border-bottom */
+            flex-grow: 0;
+            height: 120px;
+          }
+          
+        .tag-label-section {
+            margin-bottom: 5px;
+            margin-top:27px;
+            padding-top:15px;
+            padding-bottom: 3px;
+            height:80px;
+            flex-grow: 0;
+            
+        }
+        .tag-label-section label[for="tags"] {
+        margin-right: 5px;
+        }
+        .tag-label-section label {
+        display: inline-block;
+        margin-right: -29px;
+        }
+        /* Float the "Medium" checkbox and adjust the layout */
+        .tag-label-section #medium-container {
+            float: left;
+            margin-right: 10px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .modified-label-section {
+            margin-bottom: 5px;
+            padding-top:15px;
+            padding-bottom: 5px;
+            height:60px;
+            flex-grow: 0;
+            margin-top:50px;
+            
+        }
+        .type-label-section {
+            margin-bottom: 80px;
+            padding-top:10px;
+            padding-bottom: 10px;
+            height:50px;
+            flex-grow: 0;
+            
+        }
+        .add-file-label-section {
+            display: flex;
+        align-items: center;
+            
+        }
+        .logout-label-section {
+            
+                background-color: black;
+                border: none;
+                padding: 5px 10px;
+                display: inline-flex;
+                align-items: center;
+                color: white;
+                cursor: pointer;
+                position: absolute;
+                margin: 20px;
+                margin-bottom:10px;
+                top: 3px;
+                left:70px;
+                font-size: 12px;
+            
+        }
+        .sort-label-section svg,.tag-label-section svg,.modified-label-section svg,.type-label-section svg
+        {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+        }
+        .left-section div:last-child {
+            margin-bottom: 20px;
+        }
+        .logout-container {
+            width: 100px; /* Set the desired width */
+            height: 30px; /* Set the desired height */
+            position: relative;
+            left: -50px;
+            
+        }          
+    
+        .logout-button {
+            background-color: grey !important;
+            height: 30px;
+            width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Move the button to the right side */
+            color: white;
+            cursor: pointer;
+            font-size: 12px; /* Adjust the font size as desired */
+            border-radius: 5px; /* Add border radius for a rounded button appearance */
+            padding: 5px 10px; /* Adjust the padding as desired */
+            margin-left: 10px;
+        }
+          
+          .logout-button svg {
+            margin-right: 5px;
+          }
+
+          .add-file {
+            background-color: black;
+            align-items: center;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100px;
+            box-sizing: border-box;
+            display: flex;
+            border-radius: 10px;
+            height:30px;
+            font-size:12px;
+           
+          }
+          .add-file svg {
+            width: 16px;
+        height: 16px;
+        margin-right: 5px;
+        }
+
+          .right-section {
+            flex-grow: 1;
+            width: calc(100% - 300px);
+            padding: 20px;
+            margin-top: 80px;
+            background-color: #ffffff;
+            margin-right: -462px;
+            font-size: 12px; /* Adjust the font size as desired */
+        }
+        
+        .right-section table {
+            margin: 18px;
+            width: 100%; /* Adjust the width to occupy the full width of the right section */
+            border-collapse: collapse; /* Merge borders between cells */
+            table-layout: fixed;
+        }
+        
+        .right-section th,
+        .right-section td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis; /* Add ellipsis for text that overflows the table cells */
+        }
+        
+        .right-section th {
+            background-color: #f1f1f1;
+            text-align: left;
+            padding: 10px;
+        }
+        
+        .right-section tbody td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .right-section th:nth-child(3),
+        .right-section td:nth-child(3) {
+            max-width: 200px;
+        }
+        
+        .right-section td:not(:last-child),
+        .right-section th:not(:last-child) {
+            padding-right: 20px;
+        }
+        
+        
+        
+       
+        .search-bar {
+            display: flex;
+            align-items: center;
+        }
+        .search-bar input[type="text"] {
+            width: 300px; /* Adjust the width as desired */
+            height: 30px;
+            padding: 5px;
+            border: 1px solid black;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        
+        .search-bar svg {
+            margin-right: 5px;
+        }
+
+        .reupload {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: -38px;
+           
+        }
+    
+        #reupload-button {
+            background-color: black;
+            color: white;
+            height: 30px;
+            width: 100px;
+            border: none;
+            border-radius: 5px;
+            margin-left: 10px;
+        }
+
+       
+        label[for="sort-filter"] {
+            margin-right: 5px; /* Adjust the margin as desired */
+          }
+          
+        
+        .sort-controls {
+            display: flex;
+            gap: 0px;
+            margin-bottom: 5px;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: flex-start;
+        }
+         /* Adjust the width and height for the label */
+        .sort-controls label {
+            width: 100px; /* Set the desired width */
+            height: 30px; /* Set the desired height */
+        }
+          
+        .sort-checkbox {
+            margin-right: 3px; /* Adjust the margin as desired */
+        }
+
+        .file-star {
+            cursor: pointer;
+            font-size: 24px;
+          }
+          
+        .file-star::before {
+            content: "\2606";
+            color: #000;
+        }
+          
+        .file-star.filled::before {
+            content: "\2605";
+            color: #000;
+        }
+        .button-container {
+            display: flex;
+            gap:5px;
+        }
+          
+        .small-button {
+            font-size: 12px; /* Adjust the font size as desired */
+            padding: 3px 8px; /* Adjust the padding as desired */
+        }
+        .reupload
+        {
+            margin-left:-11px;
+        }
+        .black-button {
+            background-color: black;
+            color: white;
+            margin-top:5px
+            /* Add more styles as needed (e.g., padding, border, etc.) */
+        } 
+        .user-button {
+            /* Adjust the width and height as per your preference */
+            width: 200px;
+            height: 50px;
+            /* Additional styles for appearance */
+            background-color:silver; /* Blue color, change to your desired color */
+            color:black; /* Text color, change to your desired color */
+            font-size: 16px; /* Font size, change to your desired size */
+            border: none; /* Remove border if not needed */
+            border-radius: 5px; /* Round the button corners if desired */
+            cursor: pointer; /* Show a pointer cursor on hover */
+        }
+        .select {
+            margin-left: auto;
+        } 
+        .drop{
+            color:white;
+        }
+
+
+        .form-container{
+            margin-left:900px;
+            
+        }
+        
+          
+          /* Style the button inside the form */
+        #fileForm button {
+            background-color:black;
+            color: white;
+            border: none;
+            padding-top: 2px;
+            cursor: pointer;
+            width:100px;
+            height:25px;
+        }
+          
+          /* Style the file input (optional) */
+        #fileForm input[type="file"] {
+              /* Add your specific styles for the file input here */
+              border: 1px solid #ccc;
+              padding: 5px;
+              background-color: #f9f9f9;
+              /* Add more styles as needed */
+        }
+        .select {
+            height: 15px; /* Set the height of the .select div to 15px */
+            width: 100%; /* Optionally, set the width to take the full width of its parent container */
+        }
+        /* Default star color */
+        .star-white {
+          color: white;
+        }
+        /* Red star color */
+        .star-red {
+          color: red;
+        }
+        /* Green star color */
+        .star-green {
+          color: green;
+        }
+        /* Blue star color */
+        .star-blue {
+          color: blue;
+        }
+        /* Styles for the button container */
+        /* Styles for the button container */
+        .upload-button {
+          display: inline-flex;
+          align-items: center;
+          background-color: transparent;
+          border: none;
+          cursor: pointer;
+        }
+
+        /* Styles for the SVG icon */
+        .upload-button svg {
+          width: 16px;
+          height: 16px;
+          fill: white; /* Set the fill color to white */
+        }
+
+        /* Styles for the "Re-Upload" text */
+        .upload-button span {
+          color: white; /* Set the text color to white */
+          margin-left: 4px; /* Add some spacing between the icon and the text */
+          display: inline-block; /* Ensures that the text does not affect flexbox alignment */
+         
+        }
+
+        /* Flexbox styles to align the content within the button */
+        .upload-button {
+          justify-content: center; /* Horizontally center the content */
+        }
+        
+        element.style {
+            height: 67px;
+        }
+        .container {
+          display: flex;
+          flex-direction: column; /* Set the container's flex direction to stack elements vertically */
+        }
+
+        .select {
+          align-self: flex-start; /* Align the "Select" button to the left */
+          margin-bottom: 10px; /* Optional: Add spacing between the button and the table */
+        }
+
+        .table-container {
+          flex: 1;
+          width: 100%; /* Expand the table container to fill the available space */
+        }
+
+        #file-table {
+          width: 100%; /* Expand the table to fill the table container */
+          table-layout: fixed; /* Distribute the width evenly among columns */
+        }
+
+/* Additional styles for the table rows and cells if needed */
+
+        #save-button {
+          background-color: black; /* Set the background color to black */
+          color: white; /* Set the text color to white */
+       
+         
+          font-size: 12px;
+         
+          /* Add any other desired styles for the button */
+        }
+                /* Define the CSS class to hide the rows */
+        .hidden-row {
+          display: none;
+        }
+
+        
+ 
+
+        
+    </style>
+</head>
+<body>
+    <div class="top-section">
+        
+        
+        <h1>WELCOME!!</h1>
+          <p>Document Mangement System</p>
+        <div class="image">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0sCMpdBgU6oIAsSY_UnEYqMyoruC8YZrChA&usqp=CAU" align="left" width="80" alt="image"/>
+      </div>
+        
+      <div class="user-dropdown">
+        <div class="drop">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-square" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm12 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1v-1c0-1-1-4-6-4s-6 3-6 4v1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12z"/>
+            </svg>
+            <span class="dropdown-text">Hi, {{ Email_id }}!</span>
+        </div>
+        
+        <button class="btn btn-dark logout-button" onclick="window.location.href='/'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M10 3.5a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 1 1 0v2A1.5 1.5 0 0 1 9.5 14h-8A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2h8A1.5 1.5 0 0 1 11 3.5v2a.5.5 0 0 1-1 0v-2z"/>
+                    <path fill-rule="evenodd" d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
+                </svg>
+                <span>Logout</span>
+        </button>
+        
+    </div>
+    
+        
+
+       
+    </div>
+  
+    <div class="left-section">
+       <div class="sort-label-section" style=" height:31px">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel-fill" viewBox="0 0 16 16">
+                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z"/>
+            </svg>
+            <label for="filters">Sort:</label>
+           
+            <div class="sort-controls">
+            <label>
+                
+                <input type="checkbox" id="ascending-checkbox" class="sort-checkbox" >
+                previous
+            </label>
+            <label>
+                
+                <input type="checkbox" id="descending-checkbox" class="sort-checkbox">
+                latest
+            </label>
+            </div>
+
+            
+        </div>
+        <div class="tag-label-section">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tags-fill" viewBox="0 0 16 16">
+                <path d="M2 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 2 6.586V2zm3.5 4a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                <path d="M1.293 7.793A1 1 0 0 1 1 7.086V2a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l.043-.043-7.457-7.457z"/>
+              </svg>
+            
+                <label for="tags">Priority:</label>
+                <br>
+                <input type="checkbox" id="low" name="priority" value="low">
+                <label for="low">Low</label>
+                <br>
+                <input type="checkbox" id="medium" name="priority" value="medium">
+                <label for="medium">Medium</label>
+                <br>
+                <input type="checkbox" id="high" name="priority" value="high">
+                <label for="high">High</label>
+         
+            
+           
+            
+        </div>
+        {% if show_modified_section %}
+        <div class="modified-label-section">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-archive-fill" viewBox="0 0 16 16">
+                <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/>
+              </svg>
+            <label for="modified">Modified:</label>
+            <div class="button-container">
+                <button id="delete-button"class="small-button">Delete</button>
+                    <button id="download-button" class="small-button">Download</button>
+                    
+                    </select>
+            </div>
+        </div>
+        {% endif %}
+        <div class="type-label-section">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-text-fill" viewBox="0 0 16 16">
+                <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM4.5 9a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 0 1h-4z"/>
+            </svg>
+            <label for="doc-type">Type:</label>
+            <select id="doc-type">
+                    <option value="all">All</option>
+                    <option value="pdf">PDF</option>
+                    <option value="text">Text</option>
+                    <option value="image">Image</option>
+                    <option value="video">Video</option>
+            </select>
+            
+        </div>
+        <div class="add-file-label-section">
+            <button class="add-file"onclick="window.location.href='upload-file'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z"/>
+                <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
+              </svg>
+              <span>Add File</span>
+            </button>
+        </div>
+        
+        {% if show_modified_section %}
+        <div class="reupload">
+                          
+                      
+
+            <button id="reupload-button" onclick="handleReuploadButtonClick()">
+                <!--svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-plus" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
+                    <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
+                </svg-->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
+                    <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5H3z"/>
+                    <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z"/>
+                  </svg>
+                <span>selected</span>
+            </button>
+
+        </div>
+        {% endif %}
+        {% if show_modified_section %}
+        <form id="fileForm">
+          <input type="file" id="file-input" style="display: none;" multiple>
+          <button onclick="checkFileExistsAndEnableInput()" class="upload-button">
+           
+            <span>Re-Upload</span>
+          </button>
+        </form>
+        
+      
+      {% endif %}
+    </div>
+
+
+       
+                
+                  <!--form id="fileForm">
+                    <!--input type="file" id="file-input" style="display: none; " multiple /-->
+                    <!--input type="file" id="file-input" style="display: none;" multiple>
+
+                    <button onclick="checkFileExistsAndEnableInput()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-plus" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
+                        </svg>
+                        <span>Re-Upload</span>
+                        </button>
+                  </form-->
+                  
+       
+  </div class="right-section-container">
+        <div class="right-section">
+           
+            <div class="label-section">
+                <div class="search-bar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                    <input type="text" id="search" placeholder="Search files" oninput="searchFiles()">
+                </div>
+
+
+                
+                <div id="pagination-controls">
+                  <button id="prev-page-btn" disabled>&lt; Previous</button>
+                  <span id="page-numbers"></span>
+                  <button id="next-page-btn">Next &gt;</button>
+                </div>
+           
+                
+            </div>
+           
+   
+            <!-- Add the form for file replacement above the table -->
+            
+                
+              
+              
+
+            <table id="file-table">
+                <thead>
+                    <tr>
+                        <th>Case_Number</th>
+                        <th>Case_Name</th>
+                        <th>File_Name
+                         <button id="select-button" class="black-button">Select</button>
+                        </th>
+                        <th>Uploaded_by</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Format</th>
+                        <th>Size(kb)</th>
+                        <th>Priority
+                          <input type="button" id="save-button" value="Save">
+                        </th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in files %}
+                    <tr class="priority-row" >
+                        <td>{{ file.case_number }}</td>
+                        <td>{{ file.case_name }}</td>
+                        <td>
+                           
+                                <!-- Hidden checkbox initially -->
+                                <label class="checkbox-label">
+                                    <input type="checkbox" class="file-checkbox" style="display: none;">
+                                </label>
+                            
+                            <a href="#" class="file-link" data-file-id="{{ file._id }}">{{ file.file_name }}</a>
+                        </td>
+                       
+                        <td>{{ file.uploaded_by }}</td>
+                        <td>{{ file.date }}</td>
+                        <td>{{ file.time }}</td>
+                        <td>{{ file.format }}</td>
+                        <td>{{ file.size }}</td>
+                        
+                           
+                        <td><div class="container">
+                            
+                                <div class="file-priority">
+                                  <button class="star star-white">
+                                    <i class="fas fa-star "></i>
+                                  </button>
+                            </div>
+                          </div>
+                          </i></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+               
+            </table>
+            
+            
+
+        </div>
+        
+    </div>
+    
+  
+    
+  <script>
+
+
+        ////..........select checkbox script...........///
+      document.addEventListener('DOMContentLoaded', function() {
+          // Get the "Select" button element
+          const selectButton = document.getElementById('select-button');
+      
+          // Add a click event listener to the "Select" button
+          selectButton.addEventListener('click', function(event) {
+              // Prevent the default behavior of the button
+              event.preventDefault();
+      
+              // Get all the file checkboxes
+              const fileCheckboxes = document.querySelectorAll('.file-checkbox');
+      
+              // Toggle the visibility of the checkboxes based on their current state
+              fileCheckboxes.forEach(checkbox => {
+                  if (checkbox.style.display === 'none') {
+                      checkbox.style.display = 'inline-block';
+                  } else {
+                      checkbox.style.display = 'none';
+                  }
+              });
+          });
+      });
+            
+  </script>       
+
+
+
+
+
+
+  <script>
+
+    ///............................searching files script............................................
+
+        function searchFiles() {
+            // Get the search term entered by the user
+            var searchTerm = document.getElementById("search").value.toLowerCase();
+          
+            // Get all the rows in the table body
+            var table = document.getElementById("file-table");
+            var rows = table.getElementsByTagName("tr");
+          
+            // Loop through each row and hide/show based on the search term
+            for (var i = 1; i < rows.length; i++) {
+                var caseNumber = rows[i].getElementsByTagName("td")[0].innerText.toLowerCase();
+                var caseName = rows[i].getElementsByTagName("td")[1].innerText.toLowerCase();
+                var fileName = rows[i].getElementsByTagName("td")[2].innerText.toLowerCase();
+                var fileName = rows[i].getElementsByTagName("td")[3].innerText.toLowerCase();
+              
+                if (caseNumber.includes(searchTerm) || caseName.includes(searchTerm) || fileName.includes(searchTerm)) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+
+  </script>
+    ///.................................... sorting checkbox script.................................
+        
+  
+
+      
+      
+  <script>  
+      
+
+
+        //-----------------------view file script----------------------------
+
+         // Add event listener to file links
+         // Add event listener to file links
+        var fileLinks = document.querySelectorAll(".file-link");
+        fileLinks.forEach(function(link) {
+        link.addEventListener("click", function(event) {
+            event.preventDefault();
+
+            // Get the file name from the File_Name column
+            var fileName = this.textContent.trim(); // Assuming the file name is directly displayed in the column
+
+            // Make an API call to fetch the file content
+            fetch("/view_file/" + encodeURIComponent(fileName), {
+            method: "GET"
+            })
+            .then(function(response) {
+                // Handle the response from the server
+                if (response.ok) {
+                // Open the file content in a new tab or window
+                return response.blob();
+                } else {
+                throw new Error("Error fetching file content: " + response.statusText);
+                }
+            })
+            .then(function(blob) {
+                // Create a URL for the file content
+                var fileURL = URL.createObjectURL(blob);
+
+                // Open the file content in a new tab or window
+                window.open(fileURL);
+            })
+            .catch(function(error) {
+                console.error("Error fetching file content:", error);
+            });
+        });
+        });
+
+  </script> 
+  <script>
+        // Function to handle download button click
+        function handleDownloadButtonClick() {
+                // Get all the selected checkboxes
+                var checkboxes = document.querySelectorAll("#file-table tbody .file-checkbox:checked");
+
+                if (checkboxes.length > 0) {
+                    var fileNames = [];
+
+                    // Iterate over the selected checkboxes and store the file names
+                    checkboxes.forEach(function(checkbox) {
+                        var row = checkbox.closest("tr");
+                        var fileLink = row.querySelector(".file-link");
+                        var fileName = fileLink.innerText;
+                        fileNames.push(fileName);
+                    });
+
+                    // Create a temporary link element for each file and trigger the download
+                    /*fileNames.forEach(function(fileName) {
+                        var link = document.createElement("a");
+                        link.href = "/download-file/" + fileName; // Replace "/download-file/" with your actual download file route in the backend
+                        link.target = "_blank";
+                        link.download = fileName;
+
+                        // Append the link to the document body and trigger the click event
+                        document.body.appendChild(link);
+                        link.click();
+
+                        // Clean up by removing the temporary link element
+                        document.body.removeChild(link);
+                    });*/
+                   // Combine the backend endpoint with the query string containing the selected file names
+                   var downloadUrl = "/download_file/" + encodeURIComponent(fileNames.join(","));
+  
+
+                  // Open the download URL in a new tab/window to initiate the file download
+                  window.open(downloadUrl, "_blank");
+                } else {
+                    console.error("No files selected.");
+                }
+            }
+            // Function to handle delete button click
+            function handleDeleteButtonClick() {
+                // Get all the checkboxes in the table rows
+                var checkboxes = document.querySelectorAll("#file-table tbody .file-checkbox:checked");
+
+                // Create an array to store the selected Case names
+                var caseNames = [];
+
+                // Iterate over the checkboxes and store the corresponding Case names
+                checkboxes.forEach(function(checkbox) {
+                    var row = checkbox.closest("tr");
+                    var caseName = row.cells[1].innerText; // Assuming the Case_Name is in the 2nd column (index 1)
+
+                    if (caseName) {
+                        caseNames.push(caseName); // Store the case name in the array
+                    } else {
+                        console.error("Case name is not available in the row.");
+                    }
+
+                    // Remove the row from the table
+                    row.remove();
+                });
+
+                // Make an API call to delete the documents based on the case names
+                fetch("/delete-files", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                    },
+                    body: JSON.stringify({
+                        caseNames: caseNames, // Pass the array of case names to the backend
+                    }),
+                })
+                .then(function(response) {
+                    // Handle the response from the backend
+                    if (response.ok) {
+                        return response.json(); // Parse the JSON response from the backend
+                    } else {
+                        throw new Error("Error deleting documents: " + response.statusText);
+                    }
+                })
+                .then(function(data) {
+                    // Handle the data returned from the backend (if needed)
+                    console.log("Documents deleted successfully.", data);
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+            }
+
+             // Add event listeners once the DOM content is loaded
+            document.addEventListener('DOMContentLoaded', function () {
+                const downloadButton = document.getElementById("download-button");
+                const deleteButton = document.getElementById("delete-button");
+
+                // Check if the downloadButton and deleteButton elements exist
+                if (downloadButton) {
+                    // Add event listener for the Download button
+                    downloadButton.addEventListener("click", handleDownloadButtonClick);
+                }
+
+                if (deleteButton) {
+                    // Add event listener for the Delete button
+                    deleteButton.addEventListener("click", handleDeleteButtonClick);
+                }
+            });
+  
+
+
+    
+        
+  </script>  
+  <script>    
+
+        ////.....................reupload script...................................................
+
+
+        /*function handleReuploadButtonClick() {
+            // Get all the checkboxes in the table rows
+            var checkboxes = document.querySelectorAll("#file-table tbody .file-checkbox:checked");
+            
+            // Create an array to store the selected file names
+            var fileNames = [];
+            
+            // Iterate over the checkboxes and store the corresponding file names
+            checkboxes.forEach(function(checkbox) {
+              var row = checkbox.closest("tr");
+              var fileName = row.cells[2].innerText; // Assuming the file_name is in the 2nd column (index 1)
+            
+              if (fileName) {
+                fileNames.push(fileName); // Store the file name in the array
+              } else {
+                console.error("File name is not available in the row.");
+              }
+            });
+            
+            // Now the 'fileNames' array contains the file names of the checked checkboxes
+            console.log(fileNames);
+          
+            // Store the file names in a variable to access in the uploadSelectedFile function
+            var selectedFileNames = fileNames;
+          
+            // Send the 'fileNames' array to the backend for processing
+            fetch('/checkFilesInDB', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ fileNames: fileNames })
+            })
+            .then(response => response.json())
+            .then(result => {
+              console.log("Result from backend:", fileNames);
+              if (fileNames) {
+                var fileInput = document.getElementById("file-input");
+                fileInput.style.display = "block"; // Display the file input element
+                fileInput.addEventListener('change', function() {
+                  // When the file is selected, call uploadSelectedFile function with selectedFileNames
+                  uploadSelectedFile(selectedFileNames);
+                });
+                fileInput.click();
+              } else {
+                alert('File does not exist on the backend.');
+              }
+            })
+            .catch(error => {
+              console.error('Error occurred:', error);
+            });
+          }
+          
+          function uploadSelectedFile(fileNames) {
+            var fileInput = document.getElementById("file-input");
+            var selectedFile = fileInput.files[0]; // Get the selected file from the file input
+          
+            // Create a new FormData object to send the selectedFile and fileNames to the backend
+            var formData = new FormData();
+            formData.append('selectedFile', selectedFile);
+            formData.append('fileNames', JSON.stringify(fileNames)); // Pass the file names as part of the FormData
+          
+            // Fetch to the "replace file" API
+            fetch('/replace-file', 
+              method: 'POST',
+              body: formData // Send the selectedFile and fileNames as the request body using FormData
+            })
+            .then(response => response.json())
+            .then(data => {
+              // Handle the response from the backend if needed
+              console.log(data.message);
+            })
+            .catch(error => {
+              console.error('Error occurred during file upload:', error);
+            });
+          }*/
+          
+          
+          
+
+          ///....mutiple files....
+          function handleReuploadButtonClick() {
+              // Get all the checkboxes in the table rows
+              var checkboxes = document.querySelectorAll("#file-table tbody .file-checkbox:checked");
+            
+              // Create an array to store the selected file names
+              var fileNames = [];
+            
+              // Iterate over the checkboxes and store the corresponding file names
+              checkboxes.forEach(function (checkbox) {
+                var row = checkbox.closest("tr");
+                var fileName = row.cells[2].innerText; // Assuming the file_name is in the 2nd column (index 1)
+            
+                if (fileName) {
+                  fileNames.push(fileName); // Store the file name in the array
+                } else {
+                  console.error("File name is not available in the row.");
+                }
+              });
+            
+              // Now the 'fileNames' array contains the file names of the checked checkboxes
+              console.log(fileNames);
+              var selectedFileNames = fileNames;
+            
+              // Send the 'fileNames' array to the backend for processing
+              fetch('/checkFilesInDB', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ fileNames: fileNames })
+              })
+                .then(response => response.json())
+                .then(result => {
+                  console.log("Result from backend:", fileNames);
+                  if (fileNames.length > 0) {
+                    var fileInput = document.getElementById("file-input");
+                    fileInput.style.display = "block"; // Display the file input element
+                    fileInput.addEventListener('change', function () {
+                      // When the file is selected, call uploadSelectedFile function with selectedFileNames
+                      uploadSelectedFile(selectedFileNames);
+                    });
+                    fileInput.click();
+                  } else {
+                    alert('No files selected.');
+                  }
+                })
+                .catch(error => {
+                  console.error('Error occurred:', error);
+                });
+            }
+            
+            function uploadSelectedFile(fileNames) {
+              var fileInput = document.getElementById('file-input');
+              var selectedFiles = fileInput.files; // Get the selected files from the file input
+            
+              // Log the names of the selected files
+              console.log("Selected files:");
+              for (var i = 0; i < selectedFiles.length; i++) {
+                console.log(selectedFiles[i].name);
+              }
+            
+              // Create a new FormData object to send the selectedFiles and fileNames to the backend
+              var formData = new FormData();
+            
+              // Append each selected file to the FormData
+              for (var i = 0; i < selectedFiles.length; i++) {
+                formData.append('selectedFiles', selectedFiles[i]);
+              }
+            
+              formData.append('fileNames', JSON.stringify(fileNames)); // Pass the file names as part of the FormData
+            
+              // Fetch to the "replace files" API (assuming you have a backend endpoint to handle multiple file uploads)
+              fetch('/replace-file', {
+                method: 'POST',
+                body: formData // Send the selectedFiles and fileNames as the request body using FormData
+              })
+                .then(response => response.json())
+                .then(data => {
+                  // Handle the response from the backend if needed
+                  console.log(data.message);
+                })
+                .catch(error => {
+                  console.error('Error occurred during file upload:', error);
+                });
+            }
+
+  </script> 
+  <script>
+            ///.....................type dropdown script.................................
+
+
+
+            /*document.addEventListener("DOMContentLoaded", function() {
+              // Event listener for dropdown selection change
+              document.getElementById("doc-type").addEventListener("change", function() {
+                  var selectedOption = this.value.toLowerCase();
+                  var rows = document.getElementById("file-table").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+      
+                  // Iterate over each row in the table
+                  for (var i = 0; i < rows.length; i++) {
+                      var fileType = rows[i].getElementsByTagName("td")[6].textContent.toLowerCase();
+      
+                      // Show/hide rows based on selected option
+                      if (selectedOption === "all" || (selectedOption === "pdf" && fileType === "pdf") || (selectedOption === "text" && fileType === "txt") || (selectedOption === "image" && (fileType === "jpg" || fileType === "png")) || (selectedOption === "video" && fileType === "mp4")) {
+                          rows[i].style.display = "table-row";
+                      } else {
+                          rows[i].style.display = "none";
+                      }
+                  }
+              });
+          });*/
+          document.addEventListener("DOMContentLoaded", function () {
+            // Event listener for dropdown selection change
+            document.getElementById("doc-type").addEventListener("change", function () {
+              var selectedOption = this.value.toLowerCase();
+              console.log("Selected Option:", selectedOption);
+
+              var rows = document.getElementById("file-table").getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+
+              // Iterate over each row in the table
+              for (var i = 0; i < rows.length; i++) {
+                var fileType = rows[i].getElementsByTagName("td")[6].textContent.toLowerCase();
+                console.log("File Type:", fileType);
+
+                // Show/hide rows based on selected option
+                if (selectedOption === "all" || (selectedOption === "pdf" && fileType === "pdf") || (selectedOption === "text" && fileType === "txt") || (selectedOption === "image" && (fileType === "jpg" || fileType === "png")) || (selectedOption === "video" && fileType === "mp4")) {
+                  rows[i].style.display = "table-row";
+                } else {
+                  rows[i].style.display = "none";
+                }
+              }
+            });
+          });
+
+  </script>
+
+
+
+
+
+
+
+
+
+  <script>
+            
+      ///--------------------------------priority script........................................
+      
+  function changeStarColor(button) {
+      var icon = button.find("i");
+      if (icon.hasClass("star-red")) {
+        icon.removeClass("star-red").addClass("star-green");
+        return "star-green";
+      } else if (icon.hasClass("star-green")) {
+        icon.removeClass("star-green").addClass("star-blue");
+        return "star-blue";
+      } else if (icon.hasClass("star-blue")) {
+        icon.removeClass("star-blue").addClass("star-red");
+        return "star-red";
+      } else {
+        icon.addClass("star-red");
+        return "star-red";
+      }
+    }
+
+    // Function to handle star click events
+    $(".file-priority").click(function () {
+      var button = $(this).find("button");
+      var starColor = changeStarColor(button);
+      button.attr("class", "star " + starColor); // Update the class attribute with the new star color
+    });
+
+    // Function to handle save button click event
+    $("#save-button").click(function () {
+      var starColors = [];
+      $(".file-priority button").each(function () {
+        var button = $(this);
+        var starColor = button.attr("class").split(" ").find(className => className.startsWith("star-"));
+        starColors.push(starColor);
+      });
+      console.log(starColors); // You can do whatever you want with the starColors array here
+      // Save the starColors array to localStorage
+      localStorage.setItem('starColors', JSON.stringify(starColors));
+    });
+
+    // Function to retrieve and apply saved star colors
+    function applySavedStarColors() {
+      var savedColors = localStorage.getItem('starColors');
+      if (savedColors) {
+        var starColors = JSON.parse(savedColors);
+        $(".file-priority button").each(function (index) {
+          var button = $(this);
+          var starColor = starColors[index];
+          button.attr("class", "star " + starColor);
+        });
+      }
+    }
+
+    // Function to filter and display rows based on priority selection
+    function filterRowsByPriority() {
+      $(".priority-row").hide(); // Hide all rows first
+      var selectedPriority = [];
+      if ($("#low").prop("checked")) {
+        selectedPriority.push("star-green");
+      }
+      if ($("#medium").prop("checked")) {
+        selectedPriority.push("star-blue");
+      }
+      if ($("#high").prop("checked")) {
+        selectedPriority.push("star-red");
+      }
+
+      if (selectedPriority.length === 0) {
+        $(".priority-row").show(); // Show all rows if no priority is selected
+      } else {
+        $(".file-priority button").each(function () {
+          var button = $(this);
+          var starColor = button.attr("class").split(" ").find(className => className.startsWith("star-"));
+          if (selectedPriority.includes(starColor)) {
+            button.closest(".priority-row").show(); // Show rows with the selected star color
+          }
+        });
+      }
+    }
+
+    // Event handler for priority checkboxes
+    $("input[name='priority']").change(function () {
+      filterRowsByPriority();
+    });
+
+    // Call the function when the page loads
+    $(document).ready(function () {
+      applySavedStarColors();
+      filterRowsByPriority(); // Filter and display rows based on selected priority on initial page load
+    });
+
+
+  </script>
+  <script>
+
+
+
+    
+      //--------------------------------------------sort from latest& previous script -------------------------------------
+
+      document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById("ascending-checkbox").addEventListener("change", function() {
+          if (this.checked) {
+            sortTableByDateTime(false); // False indicates ascending order
+            document.getElementById("descending-checkbox").checked = false; // Uncheck the "latest" checkbox
+          } else {
+            // Reset the sorting when the checkbox is unchecked
+            sortTableByDateTime(false); // False indicates reset the sorting
+          }
+        });
+    
+        document.getElementById("descending-checkbox").addEventListener("change", function() {
+          if (this.checked) {
+            sortTableByDateTime(true); // True indicates descending order
+            document.getElementById("ascending-checkbox").checked = false; // Uncheck the "previous" checkbox
+          } else {
+            // Reset the sorting when the checkbox is unchecked
+            sortTableByDateTime(false); // False indicates reset the sorting
+          }
+        });
+    
+        function sortTableByDateTime(descending) {
+          var table = document.getElementById("file-table");
+          var tbody = table.getElementsByTagName("tbody")[0];
+          var rows = Array.from(tbody.getElementsByTagName("tr"));
+    
+          rows.sort(function(a, b) {
+            var dateTimeStrA = a.getElementsByTagName("td")[4].textContent + " " + a.getElementsByTagName("td")[5].textContent;
+            var dateTimeStrB = b.getElementsByTagName("td")[4].textContent + " " + b.getElementsByTagName("td")[5].textContent;
+    
+            var dateTimeA = new Date(dateTimeStrA).getTime();
+            var dateTimeB = new Date(dateTimeStrB).getTime();
+    
+            return descending ? dateTimeB - dateTimeA : dateTimeA - dateTimeB;
+          });
+    
+          // Reorder the rows based on the sorted index
+          for (var i = 0; i < rows.length; i++) {
+            tbody.appendChild(rows[i]);
+          }
+        }
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var currentPage = 1;
+        var entriesPerPage = 9;
+        var table = document.getElementById("file-table");
+        var rows = Array.from(table.getElementsByTagName("tbody")[0].getElementsByTagName("tr"));
+        var totalPages = Math.ceil(rows.length / entriesPerPage);
+    
+        function showPage(pageNumber) {
+          var startIndex = (pageNumber - 1) * entriesPerPage;
+          var endIndex = startIndex + entriesPerPage;
+    
+          rows.forEach(function(row, index) {
+            row.style.display = index >= startIndex && index < endIndex ? "table-row" : "none";
+          });
+        }
+    
+        function updatePaginationButtons() {
+          document.getElementById("prev-page-btn").disabled = currentPage === 1;
+          document.getElementById("next-page-btn").disabled = currentPage === totalPages;
+        }
+    
+        function updatePageNumbers() {
+          var pageNumbersElement = document.getElementById("page-numbers");
+          pageNumbersElement.textContent = "Page " + currentPage + " of " + totalPages;
+        }
+    
+        document.getElementById("prev-page-btn").addEventListener("click", function() {
+          currentPage--;
+          showPage(currentPage);
+          updatePaginationButtons();
+          updatePageNumbers();
+        });
+    
+        document.getElementById("next-page-btn").addEventListener("click", function() {
+          currentPage++;
+          showPage(currentPage);
+          updatePaginationButtons();
+          updatePageNumbers();
+        });
+    
+        // Initial display of the first page
+        showPage(currentPage);
+        updatePaginationButtons();
+        updatePageNumbers();
+      });
+  </script>
+    
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+  
+</body>
+</html>

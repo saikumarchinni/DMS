@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sign In Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <style>
+      /* Default styles for all screen sizes */
+      body {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      /* Media query for screens with a maximum width of 768px (smaller devices like tablets) */
+      @media screen and (max-width: 768px) {
+        body {
+          font-size: 14px;
+        }
+      }
+
+      /* Media query for screens with a maximum width of 480px (mobile phones) */
+      @media screen and (max-width: 480px) {
+        body {
+          font-size: 12px;
+        }
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(to right, silver, black);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        border-radius: 10px; /* Optional: Add border radius for a rounded corner effect */
+      }
+
+      .container {
+        width: 400px;
+        background-color: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: relative;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 24px;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 15px;
+        background-color: #f0f0f0;
+      }
+
+      .input-group img {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 20px;
+        width: 20px;
+      }
+      .input-group {
+        position: relative;
+        width: 400px; /* Adjust width as needed */
+      }
+      .input-group input[type="text"],
+      .input-group input[type="password"],
+      .input-group input[type="auth_token"] {
+        padding-left: 30px;
+
+        width: 100%;
+        /* Adjust padding as needed */
+        box-sizing: border-box;
+      }
+      .input-group .icon {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+      }
+
+      input[type="text"],
+      input[type="password"],
+      input[type="auth_token"] {
+        width: calc(100% - 45px);
+        padding: 10px 10px 10px 35px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+      }
+
+      input[type="submit"] {
+        width: 100%;
+        background-color: black; /* Updated color */
+        color: #fff;
+        border: none;
+        padding: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        text-align: center;
+        transition: background-color 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+        background-color: #002d62; /* Updated hover color */
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      /* Slide button styles */
+      .slide-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+      .slide-buttons button {
+        flex-grow: 1;
+        margin-right: 5px;
+      }
+
+      .slide-buttons button:last-child {
+        margin-right: 0;
+      }
+
+      /* Hidden registration form */
+      #registration-form,
+      #forgot-password-form {
+        display: none;
+      }
+
+      /* Login and Register link styles */
+      .link {
+        text-decoration: none;
+        color: black;
+        text-align: center;
+      }
+      .container {
+        text-align: center;
+      }
+      .forgot-password-container {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <form id="sign-in-form" onsubmit="return validateCredentials()">
+        <h1>Sign-In</h1>
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="sign-in-Email_id-input"
+              type="text"
+              placeholder="Email id"
+              required
+            />
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-person-circle"
+                viewBox="0 0 16 16"
+              >
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                <path
+                  fill-rule="evenodd"
+                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <div class="auth_token">
+              <input
+                id="sign-in-password-input"
+                type="password"
+                placeholder="Password"
+                required
+              />
+              <span class="icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-person-fill-lock"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"
+                  />
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+        <input type="submit" value="Login" />
+        <p class="link">
+          Not registered yet? <a href="#" id="register-link">Register</a>
+        </p>
+        <p class="link">
+          Forgot password?
+          <a href="#" onclick="showForgotPasswordForm()">Reset password</a>
+        </p>
+      </form>
+
+      <form id="registration-form" onsubmit="registerUser()">
+        <h1>Register</h1>
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="registration-Email_id-input"
+              type="text"
+              placeholder="Email id"
+              required
+            />
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-person-circle"
+                viewBox="0 0 16 16"
+              >
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                <path
+                  fill-rule="evenodd"
+                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="registration-password-input"
+              type="password"
+              placeholder="Password"
+              required
+            />
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-person-fill-lock"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="confirm-password-input"
+              type="password"
+              placeholder="Confirm Password"
+              required
+            />
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-person-fill-lock"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5v-1a1.9 1.9 0 0 1 .01-.2 4.49 4.49 0 0 1 1.534-3.693C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm7 0a1 1 0 0 1 1-1v-1a2 2 0 1 1 4 0v1a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-2Zm3-3a1 1 0 0 0-1 1v1h2v-1a1 1 0 0 0-1-1Z"
+                />
+              </svg>
+            </span>
+          </div>
+
+          <div class="input-group">
+            <input
+              id="auth_token"
+              type="auth_token"
+              placeholder="Auth Token"
+              required
+            />
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-shield-lock-fill"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0zm0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5z"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <input type="submit" value="Register" onsubmit="registerUser()" />
+        <p class="link">
+          Already a user? <a href="#" onclick="showSignInForm()">Login</a>
+        </p>
+      </form>
+
+      <form id="forgot-password-form" style="display: none">
+        <h1>Reset-Password</h1>
+
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="forgot-password-email-input"
+              type="text"
+              placeholder="Email"
+              required
+            />
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-envelope-fill"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M2 4.9v6.292l3.724-2.976a1 1 0 0 1 1.027-.02L10 11.192V4.9L6.276 7.876a1 1 0 0 1-1.027.02L2 4.9z"
+                />
+                <path
+                  fill-rule="evenodd"
+                  d="M14.736 3.27a1.61 1.61 0 0 0-.026-.155A1 1 0 0 0 14 2H2a1 1 0 0 0-.71.296 1.61 1.61 0 0 0-.026.155L7 8.111l7.736-4.84zM1 3.805V12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.805L8 8 1 3.805z"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="forgot-password-auth-token-input"
+              type="password"
+              placeholder="Auth Token"
+              required
+            />
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-shield-lock-fill"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 62.467 62.467 0 0 0-2.887-.87C9.843.266 8.69 0 8 0zm0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5z"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <input
+              id="forgot-password-new-password-input"
+              type="password"
+              placeholder="New Password"
+              required
+            />
+            <span class="icon">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-key-fill"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M11.5 0a2.5 2.5 0 0 1 2.5 2.5v3.793a1.5 1.5 0 0 0-.44 2.663l-.72.72A4.747 4.747 0 0 1 13 11.5v.5A2.5 2.5 0 0 1 10.5 14h-5A2.5 2.5 0 0 1 3 11.5v-.086l.146-.147a2.5 2.5 0 1 1 3.536-3.536l.708.708A1.494 1.494 0 0 0 8 8.5a1.5 1.5 0 0 0 1.5-1.5v-3A2.5 2.5 0 0 1 11.5 0zM8 10.5a.5.5 0 0 0-.5.5V13h-1v-2.5a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 0 0 1h1v1H4a.5.5 0 0 0 0 1h2a.5.5 0 0 0 .5-.5V12h1v1.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 0-1h-1v-1h1a.5.5 0 0 0 0-1h-2z"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+
+        <button type="submit" class="btn">Reset Password</button>
+      </form>
+      <!-- Popup message -->
+      <div id="popup-message" style="display: none">
+        <div id="popup-content">
+          <p id="popup-text"></p>
+          <button onclick="closePopup()">Close</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    var validAuthTokens = {
+      user: "1234",
+      admin: "9999",
+      superadmin: "0000",
+    };
+    /*let value;
+
+        function validateCredentials(event) {
+          event.preventDefault();
+
+          let Email_id = document
+            .getElementById("sign-in-Email_id-input")
+            .value.trim();
+          console.log("emailid", Email_id);
+          let password = document
+            .getElementById("sign-in-password-input")
+            .value.trim();
+          console.log("password", password);
+
+          if (Email_id === "" || password === "") {
+            //console.log("res", Email_id, password);
+            showPopupMessage("Please fill in all fields.");
+            return;
+          }
+
+          let data = {
+            Email_id: Email_id,
+            password: password,
+          };
+          console.log(data,"12345678io")
+
+          /*fetch(
+            "/login",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(value),
+              value: {
+                Email_id: Email_id,
+                password: password,
+              },
+            },
+            console.log(value, "data")
+          ).then((value) => {
+            //console.log(data, "data");
+            /*  if (data.error) {
+                console.log("data", data.error);
+                console.log(data,"sdfgh")
+
+                showPopupMessage(data.error);
+              } else*/
+    /*console.log(value, "123456");
+            console.log(value.Email_id, value.password, "zxcvbnm");
+
+            if (value.Email_id === Email_id && value.password === password) {
+              console.log(value, "response");
+              showPopupMessage("login successful");
+              // window.location.href = "/display";
+            } else {
+              showPopupMessage("An error occurred. Please try again later.");
+            }
+          });
+        }*/
+
+    //let data = {
+    //  Email_id: Email_id,
+    //  password: password,
+    //};
+    //console.log(data,"12345678io")
+    // let value;
+
+    function validateCredentials() {
+      var Email_id = document.getElementById("sign-in-Email_id-input").value;
+      var password = document.getElementById("sign-in-password-input").value;
+      fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          Email_id: Email_id,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (Email_id === data.Email_id && password === data.password) {
+            window.location.href = "/display";
+          }
+          else if(Email_id === data.Email_id && password !== data.password) {
+            console.log('entering')
+            // Incorrect password, display error message
+            showPopupMessage("Incorrect password. Please try again.");
+          }else {
+        // Incorrect email or other error, display generic error message
+        showPopupMessage("Invalid credentials. Please check your email and password.");
+      }
+
+          // Handle response from the server
+          console.log(data, "data"); // Do something with the response data
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          showPopupMessage("An error occurred. Please try again later.");
+        });
+
+      return false; // Prevent form submission
+    }
+
+    function registerUser(event) {
+      event.preventDefault();
+
+      var Email_id = document
+        .getElementById("registration-Email_id-input")
+        .value.trim();
+      var password = document
+        .getElementById("registration-password-input")
+        .value.trim();
+      var confirmPassword = document
+        .getElementById("confirm-password-input")
+        .value.trim();
+      var auth_token = document.getElementById("auth_token").value.trim();
+
+      console.log("Email_id:", Email_id);
+      console.log("Password:", password);
+      console.log("Confirm Password:", confirmPassword);
+      console.log("auth_token:", auth_token);
+
+      // Perform form validation
+      if (
+        Email_id === "" ||
+        password === "" ||
+        confirmPassword === "" ||
+        auth_token === ""
+      ) {
+        showPopupMessage("Please fill in all fields.");
+        return;
+      }
+
+      if (!Email_id.endsWith("@gmail.com")) {
+        showPopupMessage(
+          "Email must be a valid Gmail address (example@gmail.com)"
+        );
+      } else {
+        showPopupMessage("");
+      }
+
+      if (password !== confirmPassword) {
+        showPopupMessage("Passwords do not match.");
+        return;
+      }
+
+      if (!Object.values(validAuthTokens).includes(auth_token)) {
+        showPopupMessage("Unauthorised registration.");
+        return;
+      }
+
+      // Make a request to the backend to register the user
+      fetch("/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Email_id: Email_id,
+          password: password,
+          confirmPassword: confirmPassword,
+          auth_token: auth_token,
+        }),
+      })
+        .then(function (response) {
+          if (response.ok) {
+            return response.json(); // Parse the JSON response
+          } else {
+            throw new Error("An error occurred.");
+          }
+        })
+        .then(function (data) {
+          if (data.error) {
+            showPopupMessage(data.error);
+          } else {
+            showPopupMessage("Registration successful! You can now login.");
+
+            // Clear the input fields
+            document.getElementById("registration-Email_id-input").value = "";
+            document.getElementById("registration-password-input").value = "";
+            document.getElementById("confirm-password-input").value = "";
+            document.getElementById("auth_token").value = "";
+          }
+          window.location.href = "/";
+        })
+        .catch(function (error) {
+          showPopupMessage("An error occurred. Please try again later.");
+        });
+    }
+
+    function showPopupMessage(message) {
+      var popupText = document.getElementById("popup-text");
+      popupText.textContent = message;
+
+      var popup = document.getElementById("popup-message");
+      popup.style.display = "block";
+    }
+
+    function closePopup() {
+      var popup = document.getElementById("popup-message");
+      popup.style.display = "none";
+    }
+
+    function showRegistrationForm() {
+      // Hide sign-in form
+      document.getElementById("sign-in-form").style.display = "none";
+
+      // Show registration form
+      document.getElementById("registration-form").style.display = "block";
+    }
+
+    function showSignInForm() {
+      // Hide registration form
+      document.getElementById("registration-form").style.display = "none";
+
+      // Show sign-in form
+      document.getElementById("sign-in-form").style.display = "block";
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var signInForm = document.getElementById("sign-in-form");
+      signInForm.addEventListener("submit", validateCredentials);
+
+      var registrationForm = document.getElementById("registration-form");
+      registrationForm.addEventListener("submit", registerUser);
+
+      var registerLink = document.getElementById("register-link");
+      registerLink.addEventListener("click", showRegistrationForm);
+    });
+
+    function showForgotPasswordForm() {
+      // Hide sign-in form
+      document.getElementById("sign-in-form").style.display = "none";
+
+      document.getElementById("registration-form").style.display = "none";
+
+      // Show forgot password form
+      document.getElementById("forgot-password-form").style.display = "block";
+    }
+
+    function resetPassword(event) {
+      event.preventDefault();
+
+      var Email_id = document
+        .getElementById("forgot-password-email-input")
+        .value.trim();
+      var auth_token = document
+        .getElementById("forgot-password-auth-token-input")
+        .value.trim();
+      var newPassword = document
+        .getElementById("forgot-password-new-password-input")
+        .value.trim();
+
+      // Perform form validation
+      if (Email_id === "" || auth_token === "" || newPassword === "") {
+        showPopupMessage("Please fill in all fields.");
+        return;
+      }
+
+      // Make a request to the backend to reset the password
+      fetch("/reset-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Email_id: Email_id,
+          auth_token: auth_token,
+          newPassword: newPassword,
+        }),
+      })
+        .then(function (response) {
+          if (response.ok) {
+            return response.json(); // Parse the JSON response
+          } else {
+            throw new Error("An error occurred.");
+          }
+        })
+        .then(function (data) {
+          if (data.error) {
+            showPopupMessage(data.error);
+          } else {
+            showPopupMessage(
+              "Password reset successful! You can now sign in with your new password."
+            );
+
+            // Clear the input fields
+            document.getElementById("forgot-password-email-input").value = "";
+            document.getElementById("forgot-password-auth-token-input").value =
+              "";
+            document.getElementById(
+              "forgot-password-new-password-input"
+            ).value = "";
+            window.location.href = "/";
+          }
+        })
+        .catch(function (error) {
+          showPopupMessage("An error occurred. Please try again later.");
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+      // ...
+
+      var forgotPasswordForm = document.getElementById("forgot-password-form");
+      forgotPasswordForm.addEventListener("submit", resetPassword);
+    });
+  </script>
+</html>
