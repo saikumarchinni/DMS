@@ -1283,37 +1283,38 @@
   <script>
             
       ///--------------------------------priority script........................................
-      
-  function changeStarColor(button) {
-      var icon = button.find("i");
-      if (icon.hasClass("star-red")) {
-        icon.removeClass("star-red").addClass("star-green");
-        return "star-green";
-      } else if (icon.hasClass("star-green")) {
-        icon.removeClass("star-green").addClass("star-blue");
-        return "star-blue";
-      } else if (icon.hasClass("star-blue")) {
-        icon.removeClass("star-blue").addClass("star-red");
-        return "star-red";
-      } else {
-        icon.addClass("star-red");
-        return "star-red";
+ document.addEventListener("DOMContentLoaded", function() {
+    function changeStarColor(button) {
+      var icon = button.querySelector("i");
+      var currentColor = icon.style.color || getComputedStyle(icon).color;
+
+      if (currentColor === "white" || currentColor === "rgb(255, 255, 255)") {
+        icon.style.color = "red";
+      } else if (currentColor === "red" || currentColor === "rgb(255, 0, 0)") {
+        icon.style.color = "blue";
+      } else if (currentColor === "blue" || currentColor === "rgb(0, 0, 255)") {
+        icon.style.color = "green";
+      } else if (currentColor === "green" || currentColor === "rgb(0, 128, 0)") {
+        icon.style.color = "white";
       }
     }
 
     // Function to handle star click events
-    $(".file-priority").click(function () {
-      var button = $(this).find("button");
-      var starColor = changeStarColor(button);
-      button.attr("class", "star " + starColor); // Update the class attribute with the new star color
+    var buttons = document.querySelectorAll(".file-priority button");
+    buttons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        changeStarColor(button);
+        
+      });
     });
 
     // Function to handle save button click event
-    $("#save-button").click(function () {
+    var saveButton = document.getElementById("save-button");
+    saveButton.addEventListener("click", function () {
       var starColors = [];
-      $(".file-priority button").each(function () {
-        var button = $(this);
-        var starColor = button.attr("class").split(" ").find(className => className.startsWith("star-"));
+      buttons.forEach(function (button) {
+        var icon = button.querySelector("i");
+        var starColor = icon.style.color;
         starColors.push(starColor);
       });
       console.log(starColors); // You can do whatever you want with the starColors array here
@@ -1326,51 +1327,45 @@
       var savedColors = localStorage.getItem('starColors');
       if (savedColors) {
         var starColors = JSON.parse(savedColors);
-        $(".file-priority button").each(function (index) {
-          var button = $(this);
-          var starColor = starColors[index];
-          button.attr("class", "star " + starColor);
+        buttons.forEach(function (button, index) {
+          var icon = button.querySelector("i");
+          icon.style.color = starColors[index];
         });
       }
     }
 
     // Function to filter and display rows based on priority selection
     function filterRowsByPriority() {
-      $(".priority-row").hide(); // Hide all rows first
-      var selectedPriority = [];
-      if ($("#low").prop("checked")) {
-        selectedPriority.push("star-green");
-      }
-      if ($("#medium").prop("checked")) {
-        selectedPriority.push("star-blue");
-      }
-      if ($("#high").prop("checked")) {
-        selectedPriority.push("star-red");
-      }
+      var priorityRows = document.querySelectorAll(".priority-row");
+      var lowCheckbox = document.getElementById("low");
+      var mediumCheckbox = document.getElementById("medium");
+      var highCheckbox = document.getElementById("high");
 
-      if (selectedPriority.length === 0) {
-        $(".priority-row").show(); // Show all rows if no priority is selected
-      } else {
-        $(".file-priority button").each(function () {
-          var button = $(this);
-          var starColor = button.attr("class").split(" ").find(className => className.startsWith("star-"));
-          if (selectedPriority.includes(starColor)) {
-            button.closest(".priority-row").show(); // Show rows with the selected star color
-          }
-        });
-      }
+      priorityRows.forEach(function (row) {
+        var checkbox = row.querySelector(".file-checkbox");
+        var icon = row.querySelector(".fa-star");
+        var starColor = icon.style.color;
+        var shouldBeDisplayed =
+          (!lowCheckbox.checked || (lowCheckbox.checked && starColor === "green")) &&
+          (!mediumCheckbox.checked || (mediumCheckbox.checked && starColor === "blue")) &&
+          (!highCheckbox.checked || (highCheckbox.checked && starColor === "red"));
+
+        row.style.display = shouldBeDisplayed ? "table-row" : "none";
+      });
     }
 
-    // Event handler for priority checkboxes
-    $("input[name='priority']").change(function () {
-      filterRowsByPriority();
+
+
+    // Event handlers for priority checkboxes
+    var priorityCheckboxes = document.querySelectorAll("input[name='priority']");
+    priorityCheckboxes.forEach(function (checkbox) {
+      checkbox.addEventListener("change", filterRowsByPriority);
     });
 
-    // Call the function when the page loads
-    $(document).ready(function () {
-      applySavedStarColors();
-      filterRowsByPriority(); // Filter and display rows based on selected priority on initial page load
-    });
+    // Call the functions when the page loads
+    applySavedStarColors();
+    filterRowsByPriority(); // Filter and display rows based on selected priority on initial page load
+  });
 
 
   </script>
