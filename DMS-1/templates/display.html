@@ -561,6 +561,16 @@
         .hidden-row {
           display: none;
         }
+        .file-priority .star i {
+          color: white;
+        }
+        /* CSS for search input boxes */
+        button, input, optgroup, select, textarea {
+            margin-top: 10px;
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+        }
 
         
  
@@ -740,7 +750,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                         <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                     </svg>
-                    <input type="text" id="search" placeholder="Search files" oninput="searchFiles()">
+                    <input type="text" id="search" placeholder="Search files" oninput="searchFilesRows()">
                 </div>
 
 
@@ -761,24 +771,54 @@
               
               
 
+           
+
             <table id="file-table">
                 <thead>
-                    <tr>
-                        <th>Case_Number</th>
-                        <th>Case_Name</th>
-                        <th>File_Name
-                         <button id="select-button" class="black-button">Select</button>
+                 
+                      <th>
+                        Case_Number
+                        <br />
+                        <input type="text" id="searchCaseNumber" oninput="searchFiles()" placeholder="Search"  style="width: 150px"/>
+                      </th>
+                        <th>Case_Name
+                          <br />
+                          <input type="text" id="searchCaseName" oninput="searchFiles()" placeholder="Search"  style="width: 150px"/>
+
                         </th>
-                        <th>Uploaded_by</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Format</th>
-                        <th>Size(kb)</th>
+                        <th>File_Name
+                          
+                         <button id="select-button" class="black-button">Select</button>
+                         <br />
+                          <input type="text" id="searchFileName" oninput="searchFiles()" placeholder="Search" style="width: 150px"/>
+                        </th>
+                        <th>Uploaded_by
+                          <br />
+                          <input type="text" id="searchUploadedBy" oninput="searchFiles()" placeholder="Search" style="width: 150px" />
+                        </th>
+                        <th>Date
+                          <br />
+                          <input type="text" id="searchDate" oninput="searchFiles()" placeholder="Search" style="width: 150px"/>
+                        </th>
+                        <th>Time
+                          <br >
+                          <input type="text" id="searchTime" oninput="searchFiles()" placeholder="Search" style="width: 150px"/>
+                        </th>
+                        <th>Format
+                          <br />
+                          <input type="text" id="searchFormat" oninput="searchFiles()" placeholder="Search" style="width: 150px"/>
+                        </th>
+                        <th>Size(kb)
+                          <br />
+                          <input type="text" id="searchSize" oninput="searchFiles()" placeholder="Search" style="width: 150px" />
+                        </th>
                         <th>Priority
+                          
                           <input type="button" id="save-button" value="Save">
+      
                         </th>
                         
-                    </tr>
+                   
                 </thead>
                 <tbody>
                     {% for file in files %}
@@ -863,7 +903,7 @@
 
     ///............................searching files script............................................
 
-        function searchFiles() {
+        function searchFilesRows() {
             // Get the search term entered by the user
             var searchTerm = document.getElementById("search").value.toLowerCase();
           
@@ -1419,6 +1459,7 @@
         }
       });
     </script>
+    
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         var currentPage = 1;
@@ -1466,17 +1507,89 @@
         updatePageNumbers();
       });
   </script>
-    
-  
-  
-  
-    
-    
-  
-  
-  
-  
-  
+   
+
+<script>
+   //.......................................row filtering search...................... 
+// Function to filter rows based on search inputs
+function searchFiles() {
+  var inputCaseNumber, inputCaseName, inputFileName, inputUploadedBy, inputDate, inputTime, inputFormat, inputSize;
+  var filterCaseNumber, filterCaseName, filterFileName, filterUploadedBy, filterDate, filterTime, filterFormat, filterSize;
+  var table, rows, i, j, matchFound;
+
+  // Get the search inputs and their values
+  inputCaseNumber = document.getElementById("searchCaseNumber");
+  inputCaseName = document.getElementById("searchCaseName");
+  inputFileName = document.getElementById("searchFileName");
+  inputUploadedBy = document.getElementById("searchUploadedBy");
+  inputDate = document.getElementById("searchDate");
+  inputTime = document.getElementById("searchTime");
+  inputFormat = document.getElementById("searchFormat");
+  inputSize = document.getElementById("searchSize");
+
+  // Convert the search input values to lowercase
+  filterCaseNumber = inputCaseNumber.value.toLowerCase();
+  filterCaseName = inputCaseName.value.toLowerCase();
+  filterFileName = inputFileName.value.toLowerCase();
+  filterUploadedBy = inputUploadedBy.value.toLowerCase();
+  filterDate = inputDate.value.toLowerCase();
+  filterTime = inputTime.value.toLowerCase();
+  filterFormat = inputFormat.value.toLowerCase();
+  filterSize = inputSize.value.toLowerCase();
+
+  // Get the table and rows to be filtered
+  table = document.getElementById("file-table");
+  rows = table.getElementsByTagName("tr");
+
+  for (i = 1; i < rows.length; i++) { // Start from index 1 to skip the header row
+    matchFound = true;
+    var cells = rows[i].cells;
+
+    // Retrieve the values from each cell in the row
+    var cellCaseNumber = cells[0].textContent || cells[0].innerText;
+    var cellCaseName = cells[1].textContent || cells[1].innerText;
+    var cellFileName = cells[2].textContent || cells[2].innerText;
+    var cellUploadedBy = cells[3].textContent || cells[3].innerText;
+    var cellDate = cells[4].textContent || cells[4].innerText;
+    var cellTime = cells[5].textContent || cells[5].innerText;
+    var cellFormat = cells[6].textContent || cells[6].innerText;
+    var cellSize = cells[7].textContent || cells[7].innerText;
+
+    // Compare the values with the search filters
+    if (filterCaseNumber && cellCaseNumber.toLowerCase().indexOf(filterCaseNumber) === -1) {
+      matchFound = false;
+    }
+    if (filterCaseName && cellCaseName.toLowerCase().indexOf(filterCaseName) === -1) {
+      matchFound = false;
+    }
+    if (filterFileName && cellFileName.toLowerCase().indexOf(filterFileName) === -1) {
+      matchFound = false;
+    }
+    if (filterUploadedBy && cellUploadedBy.toLowerCase().indexOf(filterUploadedBy) === -1) {
+      matchFound = false;
+    }
+    if (filterDate && cellDate.toLowerCase().indexOf(filterDate) === -1) {
+      matchFound = false;
+    }
+    if (filterTime && cellTime.toLowerCase().indexOf(filterTime) === -1) {
+      matchFound = false;
+    }
+    if (filterFormat && cellFormat.toLowerCase().indexOf(filterFormat) === -1) {
+      matchFound = false;
+    }
+    if (filterSize && cellSize.toLowerCase().indexOf(filterSize) === -1) {
+      matchFound = false;
+    }
+
+    if (matchFound) {
+      rows[i].style.display = "";
+    } else {
+      rows[i].style.display = "none";
+    }
+  }
+}
+
+</script>  
   
 </body>
 </html>
