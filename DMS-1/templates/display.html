@@ -916,9 +916,15 @@
                 var caseNumber = rows[i].getElementsByTagName("td")[0].innerText.toLowerCase();
                 var caseName = rows[i].getElementsByTagName("td")[1].innerText.toLowerCase();
                 var fileName = rows[i].getElementsByTagName("td")[2].innerText.toLowerCase();
+                var uploaded_by = rows[i].getElementsByTagName("td")[3].innerText.toLowerCase();
+                var Date= rows[i].getElementsByTagName("td")[4].innerText.toLowerCase();
+                var Time = rows[i].getElementsByTagName("td")[5].innerText.toLowerCase();
+                var Format= rows[i].getElementsByTagName("td")[6].innerText.toLowerCase();
+                var Size= rows[i].getElementsByTagName("td")[7].innerText.toLowerCase();
               
               
-                if (caseNumber.includes(searchTerm) || caseName.includes(searchTerm) || fileName.includes(searchTerm)) {
+              
+                if (caseNumber.includes(searchTerm) || caseName.includes(searchTerm) || fileName.includes(searchTerm) || uploaded_by.includes(searchTerm)|| Date.includes(searchTerm)|| Time.includes(searchTerm)|| Format.includes(searchTerm) || Size.includes(searchTerm)) {
                     rows[i].style.display = "";
                 } else {
                     rows[i].style.display = "none";
